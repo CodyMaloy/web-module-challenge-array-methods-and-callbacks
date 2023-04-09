@@ -26,8 +26,9 @@ Use getFinals to do the following:
 💡 HINT - you should be looking at the stage key inside of the objects
 */
 
-function getFinals(/* code here */) {
-    /* code here */
+function getFinals(fifaData) {
+  const finalsData = fifaData.filter((match) => match.Stage === "Final");
+  return finalsData; 
  }
 
 
@@ -38,8 +39,10 @@ Use the higher-order function called getYears to do the following:
 2. Receive a callback function as the second parameter that will take getFinals from task 2 as an argument
 3. Return an array called years containing all of the years in the getFinals data set*/
 
-function getYears(/* code here */) {
-    /* code here */
+function getYears(fifaData, getFinalsCallback) {
+    const finals = getFinalsCallback(fifaData);
+    const years = finals.map((match) => match.Year);
+    return years;
 }
 
 
@@ -52,8 +55,16 @@ Use the higher-order function getWinners to do the following:
 💡 HINT: Don't worry about ties for now (Please see the README file for info on ties for a stretch goal.)
 4. Returns the names of all winning countries in an array called `winners` */ 
 
-function getWinners(/* code here */) {
-    /* code here */
+function getWinners(fifaData, getFinalsCallback) {
+    const finals = getFinalsCallback(fifaData);
+    const winners= finals.map((match) => {
+        if (match ["Home Team Goals"] > match["Away Team Goals"]) {
+            return match["Home Team Name"];
+        } else {
+            return match["Away Team Name"];
+        }
+    });
+    return winners;
 }
 
 
@@ -69,8 +80,14 @@ Use the higher-order function getWinnersByYear to do the following:
 💡 HINT: the strings returned need to exactly match the string in step 4.
  */
 
-function getWinnersByYear(/* code here */) {
-    /* code here */
+function getWinnersByYear(fifaData, getFinalsCallback, getYearsCallback, getWinnersCallback) {
+    const finals = getFinalsCallback(fifaData);
+    const years = getYearsCallback(fifaData, getFinalsCallback);
+    const winners = getWinnersCallback(fifaData, getFinalsCallback);
+    const result = years.map((year, index) => {
+        return `In ${year}, ${winners[index]} won the world cup!`;
+    });
+    return result;
 }
 
 
@@ -89,8 +106,15 @@ Use the higher order function `getAverageGoals` to do the following:
  
 */
 
-function getAverageGoals(/* code here */) {
-    /* code here */
+function getAverageGoals(callback) {
+    const finals = callback;
+    const totalGoals = finals.reduce((acc, match) => {
+        return acc + match["Home Team Goals"] + match["Away Team Goals"];
+    }, 0);
+ 
+    const totalMatches = finals.length;
+    const averageGoals = totalGoals / totalMatches;
+    return averageGoals.toFixed(2).toString();
  }
 
 
